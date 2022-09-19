@@ -1,0 +1,301 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model rl_cliente_beneficiario {
+  id                             Int                             @id @default(autoincrement())
+  detalhes                       String?
+  status                         Boolean?
+  cliente_key                    Int?
+  beneficiario_key               Int?
+  cliente_tp_relacionamento_key  Int?
+  tb_beneficiario                tb_beneficiario?                @relation(fields: [beneficiario_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_cliente                     tb_cliente?                     @relation(fields: [cliente_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_cliente_tipo_relacionamento tb_cliente_tipo_relacionamento? @relation(fields: [cliente_tp_relacionamento_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model rl_cobertura_oferta {
+  id            Int           @id @default(autoincrement())
+  detalhes      String?
+  oferta_key    Int?
+  cobertura_key Int?
+  tb_cobertura  tb_cobertura? @relation(fields: [cobertura_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_oferta     tb_oferta?    @relation(fields: [oferta_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model rl_cobertura_oferta_assinada {
+  id                  Int                 @id @default(autoincrement())
+  detalhes            String?
+  oferta_assinada_key Int?
+  cobertura_key       Int?
+  tb_cobertura        tb_cobertura?       @relation(fields: [cobertura_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_oferta_assinada  tb_oferta_assinada? @relation(fields: [oferta_assinada_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model rl_funcao_permissao {
+  id            Int           @id @default(autoincrement())
+  funcao_key    Int?
+  permissao_key Int?
+  tb_funcao     tb_funcao?    @relation(fields: [funcao_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_permissao  tb_permissao? @relation(fields: [permissao_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model rl_funcionario_funcao {
+  id              Int             @id @default(autoincrement())
+  funcionario_key Int?
+  funcao_key      Int?
+  dt_inicio       DateTime?       @db.Date
+  dt_final        DateTime?       @db.Date
+  tb_funcao       tb_funcao?      @relation(fields: [funcao_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_funcionario  tb_funcionario? @relation(fields: [funcionario_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model rl_oferta_beneficiario {
+  id                   Int                 @id @default(autoincrement())
+  porcentagem_recebida Float?
+  detalhes             String?
+  status               Boolean?
+  oferta_assinada_key  Int?
+  beneficiario_key     Int?
+  tb_beneficiario      tb_beneficiario?    @relation(fields: [beneficiario_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_oferta_assinada   tb_oferta_assinada? @relation(fields: [oferta_assinada_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tb_beneficiario {
+  id                      Int                       @id @default(autoincrement())
+  pessoa_key              Int?
+  tb_pessoa               tb_pessoa?                @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  rl_cliente_beneficiario rl_cliente_beneficiario[]
+  rl_oferta_beneficiario  rl_oferta_beneficiario[]
+  tb_pagamento            tb_pagamento[]
+}
+
+model tb_chamado {
+  id          Int       @id @default(autoincrement())
+  data        DateTime? @db.Timestamp(6)
+  cliente     String?   @db.VarChar(255)
+  funcionario String?   @db.VarChar(255)
+}
+
+model tb_cliente {
+  id                            Int                       @id @default(autoincrement())
+  hobbies                       String?
+  fuma                          Boolean?
+  registro_conducao             String?
+  cliente_categoria_key         Int?
+  pessoa_key                    Int?
+  faixa_renda                   Float?
+  politicamente_exposto         Boolean?
+  vinculo_politicamente_exposto Boolean?
+  tb_cliente_categoria          tb_cliente_categoria?     @relation(fields: [cliente_categoria_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_pessoa                     tb_pessoa?                @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  rl_cliente_beneficiario       rl_cliente_beneficiario[]
+  tb_forma_pagamento            tb_forma_pagamento[]
+  tb_oferta                     tb_oferta[]
+  tb_oferta_assinada            tb_oferta_assinada[]
+}
+
+model tb_cliente_categoria {
+  id           Int          @id @default(autoincrement())
+  nm_categoria String?      @db.VarChar(64)
+  tb_cliente   tb_cliente[]
+}
+
+model tb_cliente_tipo_relacionamento {
+  id                      Int                       @id @default(autoincrement())
+  tp_relacionamento       String?                   @db.VarChar(64)
+  rl_cliente_beneficiario rl_cliente_beneficiario[]
+}
+
+model tb_cobertura {
+  id                           Int                            @id @default(autoincrement())
+  cobertura                    String?                        @db.VarChar(255)
+  descricao                    String?
+  rl_cobertura_oferta          rl_cobertura_oferta[]
+  rl_cobertura_oferta_assinada rl_cobertura_oferta_assinada[]
+}
+
+model tb_endereco {
+  id                 Int          @id @default(autoincrement())
+  num_cep            String?      @db.Char(8)
+  complemento        String?      @db.VarChar(255)
+  num_residencia     Int?
+  tipo_imovel        tipo_imovel?
+  residencia_propria Boolean?
+  detalhes           String?      @db.VarChar(255)
+  pessoa_key         Int?
+  tb_pessoa          tb_pessoa?   @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tb_forma_pagamento {
+  id                  Int                 @id @default(autoincrement())
+  dt_pagamento        DateTime?           @db.Date
+  valor               Decimal?            @db.Decimal
+  descricao           String?
+  cliente_key         Int?
+  oferta_assinada_key Int?
+  tb_cliente          tb_cliente?         @relation(fields: [cliente_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_oferta_assinada  tb_oferta_assinada? @relation(fields: [oferta_assinada_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tb_funcao {
+  id                    Int                     @id @default(autoincrement())
+  funcao                String?                 @db.VarChar(255)
+  rl_funcao_permissao   rl_funcao_permissao[]
+  rl_funcionario_funcao rl_funcionario_funcao[]
+}
+
+model tb_funcionario {
+  id                    Int                     @id @default(autoincrement())
+  pessoa_key            Int?
+  tb_pessoa             tb_pessoa?              @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  rl_funcionario_funcao rl_funcionario_funcao[]
+  tb_oferta             tb_oferta[]
+  tb_oferta_assinada    tb_oferta_assinada[]
+}
+
+model tb_oferta {
+  id                  Int                   @id @default(autoincrement())
+  dt_oferta           DateTime?             @db.Date
+  vl_total            Decimal?              @db.Decimal
+  termos              String?
+  detalhes            String?
+  status              Boolean?
+  cliente_key         Int?
+  plano_key           Int?
+  funcionario_key     Int?
+  tp_politica_key     Int?
+  tb_cliente          tb_cliente?           @relation(fields: [cliente_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_funcionario      tb_funcionario?       @relation(fields: [funcionario_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_plano            tb_plano?             @relation(fields: [plano_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_tipo_politica    tb_tipo_politica?     @relation(fields: [tp_politica_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  rl_cobertura_oferta rl_cobertura_oferta[]
+  tb_oferta_assinada  tb_oferta_assinada[]
+}
+
+model tb_oferta_assinada {
+  id                           Int                            @id @default(autoincrement())
+  dt_assinatura                DateTime?                      @db.Date
+  dt_inicio                    DateTime?                      @db.Date
+  dt_fim                       DateTime?                      @db.Date
+  vl_total                     Decimal?                       @db.Decimal
+  termos                       String?
+  detalhes                     String?
+  status                       Boolean?
+  cliente_key                  Int?
+  plano_key                    Int?
+  funcionario_key              Int?
+  oferta_key                   Int?
+  tp_politica_key              Int?
+  tb_cliente                   tb_cliente?                    @relation(fields: [cliente_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_funcionario               tb_funcionario?                @relation(fields: [funcionario_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_oferta                    tb_oferta?                     @relation(fields: [oferta_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_plano                     tb_plano?                      @relation(fields: [plano_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_tipo_politica             tb_tipo_politica?              @relation(fields: [tp_politica_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  rl_cobertura_oferta_assinada rl_cobertura_oferta_assinada[]
+  rl_oferta_beneficiario       rl_oferta_beneficiario[]
+  tb_forma_pagamento           tb_forma_pagamento[]
+  tb_pagamento                 tb_pagamento[]
+}
+
+model tb_pagamento {
+  id                  Int                 @id @default(autoincrement())
+  dt_pagamento        DateTime?           @db.Date
+  vl_pago             Decimal?            @db.Decimal
+  cobertura_key       Int?
+  oferta_assinada_key Int?
+  razao_pagamento_key Int?
+  beneficiario_key    Int?
+  tb_beneficiario     tb_beneficiario?    @relation(fields: [beneficiario_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_oferta_assinada  tb_oferta_assinada? @relation(fields: [oferta_assinada_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_razao_pagamento  tb_razao_pagamento? @relation(fields: [razao_pagamento_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tb_permissao {
+  id                  Int                   @id @default(autoincrement())
+  nm_permissao        String?               @db.VarChar(60)
+  rl_funcao_permissao rl_funcao_permissao[]
+}
+
+model tb_pessoa {
+  id              Int               @id @default(autoincrement())
+  nm_pessoa       String?           @db.VarChar(255)
+  num_rg          String?           @db.Char(13)
+  num_cpf_cnpj    String?           @db.Char(14)
+  dt_nascimento   DateTime?         @db.Date
+  genero          genero?
+  num_contato     String?           @db.Char(15)
+  estado_civil    estado_civil?
+  nacionalidade   String?           @db.VarChar(100)
+  reside_brasil   Boolean?
+  email           String?           @db.VarChar(100)
+  tb_beneficiario tb_beneficiario[]
+  tb_cliente      tb_cliente[]
+  tb_endereco     tb_endereco[]
+  tb_funcionario  tb_funcionario[]
+  tb_usuario      tb_usuario[]
+}
+
+model tb_plano {
+  id                  Int                  @id @default(autoincrement())
+  nm_plano            String?              @db.VarChar(64)
+  plano_categoria_key Int?
+  tb_plano_categoria  tb_plano_categoria?  @relation(fields: [plano_categoria_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tb_oferta           tb_oferta[]
+  tb_oferta_assinada  tb_oferta_assinada[]
+}
+
+model tb_plano_categoria {
+  id           Int        @id @default(autoincrement())
+  nm_categoria String?    @db.VarChar(64)
+  tb_plano     tb_plano[]
+}
+
+model tb_razao_pagamento {
+  id           Int            @id @default(autoincrement())
+  nm_razao     String?        @db.VarChar(255)
+  tb_pagamento tb_pagamento[]
+}
+
+model tb_tipo_politica {
+  id                   Int                  @id @default(autoincrement())
+  nm_politica          String?              @db.VarChar(64)
+  descricao            String?
+  expira               Boolean?
+  pagamento_mensal     Boolean?
+  pagamento_trimestral Boolean?
+  pagamento_anual      Boolean?
+  tb_oferta            tb_oferta[]
+  tb_oferta_assinada   tb_oferta_assinada[]
+}
+
+model tb_usuario {
+  id         Int        @id @default(autoincrement())
+  usuario    String?    @db.VarChar(255)
+  senha      String?    @db.VarChar(255)
+  pessoa_key Int?
+  tb_pessoa  tb_pessoa? @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum estado_civil {
+  SOLTEIRO
+  CASADO
+  SEPARADO
+  DIVORCIADO
+  VIUVO
+}
+
+enum genero {
+  MASCULINO
+  FEMININO
+}
+
+enum tipo_imovel {
+  CASA
+  APARTAMENTO
+}

@@ -1,6 +1,9 @@
-import { Resquest, Response, NextFunction } from "express";
-import { token } from "../Config/token";
+import { Request, Response, NextFunction } from "express";
+/* import { token } from "../Config/token"; */
+import { prisma, PrismaClient } from "@prisma/client";
+import { Client } from "../interfaces/client";
 
+const Prisma = new PrismaClient();
 
 export class UserController {
   public static async getUsers(
@@ -8,6 +11,6 @@ export class UserController {
     res: Response,
     next: NextFunction
   ) {
-    res.send("Hello World");
+    res.status(200).json({ message: "ok" });
   }
 }
