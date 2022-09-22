@@ -57,6 +57,12 @@ export const getId = async (
         id: Number(id),
       },
     });
+
+    if (!client) {
+      next(Error.notFound(`Cliente do id: ${id} não encontrado!`));
+      return;
+    }
+
     res.status(200).json(client);
   } catch (error: any) {
     next(Error.badRequest(error.message));

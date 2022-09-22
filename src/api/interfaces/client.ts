@@ -1,4 +1,5 @@
 // criando interface para receber os dados do usuario
+
 export interface Client {
   id?: number;
   nm_pessoa: string;
