@@ -1,11 +1,11 @@
-import { Resquest, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { Client } from "../interfaces/client";
 // import { token } from "../Config/token";
 import prisma from "../services/prisma";
 import { Error } from "../entities/error";
 
 export const create = async (
-  req: Resquest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -16,6 +16,7 @@ export const create = async (
     res.status(200).json({ message: "Cliente cadastrado com sucesso!" });
   } catch (error: any) {
     next(Error.badRequest(error.message));
+    console.log(error);
   }
 };
 
@@ -63,7 +64,7 @@ export const getId = async (
       return;
     }
 
-    res.status(200).json(client);
+    return res.status(200).json(client);
   } catch (error: any) {
     next(Error.badRequest(error.message));
   }

@@ -233,7 +233,6 @@ model tb_pessoa {
   estado_civil    estado_civil?
   nacionalidade   String?           @db.VarChar(100)
   reside_brasil   Boolean?
-  email           String?           @db.VarChar(100)
   tb_beneficiario tb_beneficiario[]
   tb_cliente      tb_cliente[]
   tb_endereco     tb_endereco[]
@@ -279,6 +278,7 @@ model tb_usuario {
   usuario    String?    @db.VarChar(255)
   senha      String?    @db.VarChar(255)
   pessoa_key Int?
+  email      String?    @db.VarChar(100)
   tb_pessoa  tb_pessoa? @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 

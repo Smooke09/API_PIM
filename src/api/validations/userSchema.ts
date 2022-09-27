@@ -6,6 +6,7 @@ import { User } from "../interfaces/user";
 export const userClientScheme: SchemaOf<User> = object({
   id: number().optional(),
   usuario: string().required("Nome é obrigatório"),
-  password: string().required("Senha é obrigatória"),
-  pessoa_key: number().optional(),
+  senha: string().required("Senha é obrigatória"),
+  email: string().required("Email é obrigatório"),
+  // pessoa_key: number().optional(),
 });

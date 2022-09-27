@@ -27,4 +27,11 @@ export class Error {
       message,
     };
   }
+
+  public static unauthorized(message: string): Error {
+    return {
+      code: 401,
+      message,
+    };
+  }
 }

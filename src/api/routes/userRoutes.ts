@@ -1,22 +1,13 @@
 import { Router } from "express";
-import {
-  create,
-  getAll,
-  getId,
-  update,
-  remove,
-} from "../controllers/clientController";
+import { create, remove, getId } from "../controllers/userController";
 
-// import bodyValidationMiddleware from "../middlewares/bodyValidationMiddleware.ts";
 // import clientSchema from "../validations/clientSchema";
 
-const publicRoutes = Router();
+const privateRoutes = Router();
 
-//Crud de Clientes
-publicRoutes.get("/:id", getId);
-publicRoutes.get("/", getAll);
-publicRoutes.post("/add", create);
-publicRoutes.put("/:id", update);
-publicRoutes.delete("/:id", remove);
+//Crud de Users Rotas privadas
+privateRoutes.get("/:id", getId);
+privateRoutes.post("/add", create);
+privateRoutes.delete("/:id", remove);
 
-export default publicRoutes;
+export default privateRoutes;
