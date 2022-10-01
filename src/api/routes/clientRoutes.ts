@@ -14,7 +14,7 @@ const clientRoutes = Router();
 clientRoutes.get("/:id", getId);
 clientRoutes.get("/", getAll);
 clientRoutes.post("/add", create);
-clientRoutes.put("/:id", update);
-clientRoutes.delete("/:id", remove);
+clientRoutes.put("/update/:id", update);
+clientRoutes.delete("/delete/:id", remove);
 
 export default clientRoutes;

@@ -10,7 +10,7 @@ export async function genToken(userId: number) {
     },
     process.env.SECRET_KEY,
     {
-      expiresIn: 3600,
+      expiresIn: "5h",
     }
   );
 

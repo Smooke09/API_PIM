@@ -11,5 +11,4 @@ export interface Client {
   estado_civil?: string;
   nacionalidade: string;
   reside_brasil: boolean;
-  email: string;
 }

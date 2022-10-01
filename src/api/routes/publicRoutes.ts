@@ -6,4 +6,5 @@ const publicRoutes = Router();
 //EndPonts Publicos
 publicRoutes.post("/login", login);
 
+
 export default publicRoutes;

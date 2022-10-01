@@ -4,45 +4,6 @@ import prisma from "../services/prisma";
 import bcryptConfig from "../../Config/bcryptConfig";
 import { Error } from "../entities/error";
 
-// Funcao de Criar um usuario
-export const create = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    // Pegando os dados do body
-    const user = req.body;
-
-    // Validacao do Yup
-    await userClientScheme.validate(user, { abortEarly: false });
-
-    // Verifica se o usuario ja existe
-    const userExists = await prisma.tb_usuario.findFirst({
-      where: {
-        email: user.email,
-      },
-    });
-
-    // validando Se o email ja existir retorna um erro
-    if (userExists) {
-      next(Error.badRequest("Email já existe"));
-      return;
-    }
-
-    // Criptografa a senha
-    const hash = await bcryptConfig(user.senha);
-
-    // Cria o usuario
-    const newUser = await prisma.tb_usuario.create({
-      data: { ...user, senha: hash },
-    });
-    res.status(201).json("Usuário criado com sucesso");
-  } catch (err: any) {
-    next(Error.badRequest(err.message));
-  }
-};
-
 // Editando um usuario
 export const update = async (
   req: Request,
@@ -51,7 +12,18 @@ export const update = async (
 ) => {
   try {
     const { id } = req.params;
-    const user = req.body;
+    const { usuario, email, senha, confirmSenha } = req.body;
+
+    // pegando dados do body e criando um novo objeto
+    const data = {
+      usuario,
+      email,
+      senha,
+      confirmSenha,
+    };
+
+    // Validacao do Yup
+    await userClientScheme.validate(data, { abortEarly: false });
 
     // Verifica se o usuario existe
     const userExists = await prisma.tb_usuario.findFirst({
@@ -64,8 +36,20 @@ export const update = async (
     if (!userExists) {
       next(Error.badRequest("Usuário não existe"));
       return;
+    } else if (userExists?.email !== data.email) {
+      //Nao deixar trocar o email
+      next(Error.badRequest("Não é possivel trocar o email"));
+      return;
     } else {
-      // Se o usuario existir
+      // se o usuario existir e o email for o mesmo
+
+      // Criptografa a senha
+      const hash = await bcryptConfig(data.senha);
+      const user = {
+        usuario: data.usuario,
+        senha: hash,
+      };
+      // Atualiza o usuario
       const userUpdate = await prisma.tb_usuario.update({
         where: {
           id: Number(id),
@@ -73,6 +57,7 @@ export const update = async (
         data: user,
       });
     }
+    res.status(200).json("Usuário atualizado com sucesso");
   } catch (err: any) {
     next(Error.badRequest(err.message));
     return;
@@ -80,7 +65,6 @@ export const update = async (
 };
 
 // Busca um usuario pelo id
-
 export const getId = async (
   req: Request,
   res: Response,

@@ -2,6 +2,7 @@ import { Router } from "express";
 import clientRoutes from "./clientRoutes";
 import publicRoutes from "./publicRoutes";
 import userRoutes from "./userRoutes";
+import { authTokenMiddleware } from "../middlewares/authTokenMiddleware";
 
 const routes = Router();
 
