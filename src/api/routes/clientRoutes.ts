@@ -13,7 +13,6 @@ const clientRoutes = Router();
 //Crud de Clientes
 clientRoutes.get("/:id", getId);
 clientRoutes.get("/", getAll);
-clientRoutes.post("/add", create);
 clientRoutes.put("/update/:id", update);
 clientRoutes.delete("/delete/:id", remove);
 

@@ -60,75 +60,11 @@
         }
       }
     },
-    "/client/{id}": {
-      "get": {
-        "summary": "Buscar cliente",
-        "description": "Essa rota serve para buscar um cliente",
-        "tags": ["Clientes"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID do cliente",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Cliente encontrado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Cliente não encontrado"
-          },
-          "500": {
-            "description": "Erro interno do servidor"
-          }
-        }
-      }
-    },
-    "/client/": {
-      "get": {
-        "summary": "Buscar todos os clientes",
-        "description": "Essa rota serve para buscar todos os clientes",
-        "tags": ["Clientes"],
-        "responses": {
-          "200": {
-            "description": "Clientes encontrados com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Clientes não encontrados"
-          },
-          "500": {
-            "description": "Erro interno do servidor"
-          }
-        }
-      }
-    },
-    "/client/add": {
+    "/public/add": {
       "post": {
         "summary": "Cadastrar cliente",
         "description": "Essa rota serve para cadastrar um cliente",
-        "tags": ["Clientes"],
+        "tags": ["Publicas"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -190,11 +126,52 @@
                 }
               }
             }
+          },
+          "responses": {
+            "200": {
+              "description": "Cliente cadastrado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/Cliente"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Email já cadastrado"
+            },
+            "400": {
+              "description": "Usuário já cadastrado"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
           }
-        },
+        }
+      }
+    },
+    "/client/{id}": {
+      "get": {
+        "summary": "Buscar cliente",
+        "description": "Essa rota serve para buscar um cliente",
+        "tags": ["Clientes"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do cliente",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Cliente cadastrado com sucesso",
+            "description": "Cliente encontrado com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -205,7 +182,33 @@
             }
           },
           "400": {
-            "description": "Cliente não cadastrado"
+            "description": "Cliente não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/client/": {
+      "get": {
+        "summary": "Buscar todos os clientes",
+        "description": "Essa rota serve para buscar todos os clientes",
+        "tags": ["Clientes"],
+        "responses": {
+          "200": {
+            "description": "Clientes encontrados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Cliente"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Clientes não encontrados"
           },
           "500": {
             "description": "Erro interno do servidor"

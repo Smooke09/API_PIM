@@ -1,37 +1,32 @@
+import { string } from "yup";
+
 export class Error {
   message: string;
   code: number;
 
-  constructor(message: string, code: number) {
-    this.message = message;
+  constructor(code: number, msg: string) {
+    this.message = msg;
     this.code = code;
   }
 
-  public static badRequest(message: string): Error {
-    return {
-      code: 400,
-      message,
-    };
+  // -- Error Message --
+  static badRequest(msg: string) {
+    return new Error(400, msg);
   }
 
-  public static notFound(message: string): Error {
-    return {
-      code: 404,
-      message,
-    };
+  static notFound(msg: string) {
+    return new Error(404, msg);
   }
 
-  public static internal(message: string): Error {
-    return {
-      code: 500,
-      message,
-    };
+  static forbidden(msg: string) {
+    return new Error(403, msg);
   }
 
-  public static unauthorized(message: string): Error {
-    return {
-      code: 401,
-      message,
-    };
+  static notAcceptable(msg: string) {
+    return new Error(406, msg);
+  }
+
+  static unauthorize(msg: string) {
+    return new Error(401, msg);
   }
 }

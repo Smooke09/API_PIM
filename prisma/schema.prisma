@@ -227,12 +227,12 @@ model tb_pessoa {
   nm_pessoa       String?           @db.VarChar(255)
   num_rg          String?           @db.Char(13)
   num_cpf_cnpj    String?           @db.Char(14)
-  dt_nascimento   DateTime?         @db.Date
   genero          genero?
   num_contato     String?           @db.Char(15)
   estado_civil    estado_civil?
   nacionalidade   String?           @db.VarChar(100)
   reside_brasil   Boolean?
+  dt_nascimento   DateTime?         @db.Date
   tb_beneficiario tb_beneficiario[]
   tb_cliente      tb_cliente[]
   tb_endereco     tb_endereco[]
@@ -276,9 +276,9 @@ model tb_tipo_politica {
 model tb_usuario {
   id         Int        @id @default(autoincrement())
   usuario    String?    @db.VarChar(255)
+  email      String?    @db.VarChar(255)
   senha      String?    @db.VarChar(255)
   pessoa_key Int?
-  email      String?    @db.VarChar(100)
   tb_pessoa  tb_pessoa? @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 

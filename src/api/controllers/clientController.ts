@@ -19,6 +19,7 @@ export const create = async (
       nm_pessoa,
       num_rg,
       num_cpf_cnpj,
+      dt_nascimento,
       genero,
       num_contato,
       estado_civil,
@@ -28,17 +29,13 @@ export const create = async (
 
     const newBody = req.body;
 
-    if (newBody.email === undefined || newBody.email === "") {
-      next(Error.badRequest("Email não pode ser vazio"));
-      return;
-    }
-
     // client
     const newClient = await prisma.tb_pessoa.create({
       data: {
         nm_pessoa,
         num_rg,
         num_cpf_cnpj,
+        dt_nascimento: new Date(dt_nascimento),
         genero,
         num_contato,
         estado_civil,
@@ -47,7 +44,7 @@ export const create = async (
       },
     });
 
-    // filtranod id para chave estrangeira
+    // filtrando id para chave estrangeira para cadastrar usuario
     const filterUserId = await prisma.tb_pessoa.findUnique({
       where: {
         id: newClient.id,
@@ -69,9 +66,6 @@ export const create = async (
       confirmSenha,
       pessoa_key: filterUserId.id,
     };
-
-    // Validacao do Yup
-    await userClientScheme.validate(data, { abortEarly: false });
 
     // Verifica se o usuario ja existe
     const userExists = await prisma.tb_usuario.findFirst({
@@ -104,7 +98,7 @@ export const create = async (
 
     res.status(201).json("Usuário criado com sucesso");
   } catch (err: any) {
-    next(Error.badRequest(err.message));
+    // next(Error.badRequest(err.message));
   }
 };
 
@@ -122,7 +116,17 @@ export const update = async (
       where: {
         id: Number(id),
       },
-      data: client,
+      data: {
+        nm_pessoa: client.nm_pessoa,
+        num_rg: client.num_rg,
+        num_cpf_cnpj: client.num_cpf_cnpj,
+        dt_nascimento: new Date(client.dt_nascimento),
+        genero: client.genero,
+        num_contato: client.num_contato,
+        estado_civil: client.estado_civil,
+        nacionalidade: client.nacionalidade,
+        reside_brasil: client.reside_brasil,
+      },
     });
 
     res
