@@ -92,6 +92,8 @@ model tb_cliente {
   faixa_renda                   Float?
   politicamente_exposto         Boolean?
   vinculo_politicamente_exposto Boolean?
+  profissao                     String?                   @db.VarChar(100)
+  risco_profissao               risco_profissao?
   tb_cliente_categoria          tb_cliente_categoria?     @relation(fields: [cliente_categoria_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
   tb_pessoa                     tb_pessoa?                @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
   rl_cliente_beneficiario       rl_cliente_beneficiario[]
@@ -127,7 +129,7 @@ model tb_endereco {
   num_residencia     Int?
   tipo_imovel        tipo_imovel?
   residencia_propria Boolean?
-  detalhes           String?      @db.VarChar(255)
+  detalhes           String?
   pessoa_key         Int?
   tb_pessoa          tb_pessoa?   @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -298,4 +300,12 @@ enum genero {
 enum tipo_imovel {
   CASA
   APARTAMENTO
+}
+
+enum risco_profissao {
+  NULO
+  PEQUENO
+  MEDIO
+  ALTO
+  EXTREMO
 }

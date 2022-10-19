@@ -195,3 +195,34 @@ export const remove = async (
     next(Error.badRequest(error.message));
   }
 };
+
+export const addPessoa = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    const newBody = req.body;
+
+    console.log(newBody);
+
+    const newClient = await prisma.tb_cliente.create({
+      data: {
+        hobbies: newBody.hobbies,
+        fuma: newBody.fuma,
+        registro_conducao: newBody.registro_conducao,
+        pessoa_key: Number(id),
+        faixa_renda: newBody.faixa_renda,
+        politicamente_exposto: newBody.politicamente_exposto,
+        vinculo_politicamente_exposto: newBody.vinculo_politicamente_exposto,
+        risco_profissao: newBody.risco_profissao,
+        profissao: newBody.profissao,
+      },
+    });
+    res.status(201).json(newClient);
+  } catch (error: any) {
+    next(Error.badRequest(error.message));
+  }
+};

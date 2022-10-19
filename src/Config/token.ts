@@ -20,6 +20,5 @@ export async function genToken(userId: number) {
 export async function verifyToken(token: any) {
   const data = await verify(token, process.env.SECRET_KEY);
 
-  console.log(data);
   return data;
 }

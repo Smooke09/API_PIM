@@ -190,6 +190,88 @@
         }
       }
     },
+    "/client/form/create/{id}": {
+      "post": {
+        "summary": "Cadastrar formulário",
+        "description": "Essa rota serve para cadastrar um formulário",
+        "tags": ["Clientes"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do cliente",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hobbies": {
+                    "type": "string",
+                    "example": "Jogar"
+                  },
+                  "fumante": {
+                    "type": "boolean",
+                    "example": "true"
+                  },
+                  "registro_conducao": {
+                    "type": "string",
+                    "example": "true"
+                  },
+                  "faixa_renda": {
+                    "type": "number",
+                    "example": "1000"
+                  },
+                  "politicamente_exposto": {
+                    "type": "boolean",
+                    "example": "true"
+                  },
+                  "vinculo_politico": {
+                    "type": "boolean",
+                    "example": "true"
+                  },
+                  "profissao": {
+                    "type": "string",
+                    "example": "Programador"
+                  },
+                  "risco_profissao": {
+                    "type": "boolean",
+                    "example": "true"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Formulário cadastrado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/Formulario"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Formulário não cadastrado"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      }
+    },
+
     "/client/": {
       "get": {
         "summary": "Buscar todos os clientes",
@@ -197,15 +279,7 @@
         "tags": ["Clientes"],
         "responses": {
           "200": {
-            "description": "Clientes encontrados com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              }
-            }
+            "description": "Clientes encontrados com sucesso"
           },
           "400": {
             "description": "Clientes não encontrados"
