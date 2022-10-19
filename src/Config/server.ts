@@ -6,7 +6,6 @@ import errorHandlerMiddleware from "../api/middlewares/errorHandlerMiddleware";
 import * as dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json";
-import { authTokenMiddleware } from "../api/middlewares/authTokenMiddleware";
 
 dotenv.config();
 const server = express();

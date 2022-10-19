@@ -1,0 +1,539 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "APi desenvolvida para o PIM",
+        "description": "EndPoint de todas as Rotas e /api a partir dessa voce acessa todas as outras rotas!",
+        "version": "1.0.0",
+        "contact": {
+            "name": "Pedro Lucas",
+            "email": "pedrolucas1014@hotmail.com"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3333/api",
+            "description": "EndPoint"
+        }
+    ],
+    "paths": {
+        "/public/login": {
+            "post": {
+                "summary": "Login",
+                "description": "Essa rota serve para fazer o login",
+                "tags": ["Publicas"],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário logado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Login"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Senha incorreta"
+                    },
+                    "400": {
+                        "description": "Email não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/public/add": {
+            "post": {
+                "summary": "Cadastrar cliente",
+                "description": "Essa rota serve para cadastrar um cliente",
+                "tags": ["Publicas"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nm_pessoa": {
+                                        "type": "string",
+                                        "example": "LUCAS"
+                                    },
+                                    "num_rg": {
+                                        "type": "string",
+                                        "example": "987654321"
+                                    },
+                                    "num_cpf_cnpj": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "dt_nascimento": {
+                                        "type": "string",
+                                        "example": "1999-12-31"
+                                    },
+                                    "genero": {
+                                        "type": "string",
+                                        "example": "MASCULINO"
+                                    },
+                                    "num_contato": {
+                                        "type": "string",
+                                        "example": "13981706262"
+                                    },
+                                    "estado_civil": {
+                                        "type": "string",
+                                        "example": "SOLTEIRO"
+                                    },
+                                    "nacionalidade": {
+                                        "type": "string",
+                                        "example": "Brasileiro"
+                                    },
+                                    "reside_brasil": {
+                                        "type": "boolean",
+                                        "example": "true"
+                                    },
+                                    "usuario": {
+                                        "type": "string",
+                                        "example": "teste"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "teste@teste.com"
+                                    },
+                                    "senha": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "confirmSenha": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Cliente cadastrado com sucesso",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "$ref": "#/components/schemas/Cliente"
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Email já cadastrado"
+                        },
+                        "400": {
+                            "description": "Usuário já cadastrado"
+                        },
+                        "500": {
+                            "description": "Erro interno do servidor"
+                        }
+                    }
+                }
+            }
+        },
+        "/client/{id}": {
+            "get": {
+                "summary": "Buscar cliente",
+                "description": "Essa rota serve para buscar um cliente",
+                "tags": ["Clientes"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cliente encontrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Cliente"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Cliente não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/client/form/create/{id}": {
+            "post": {
+                "summary": "Cadastrar formulário",
+                "description": "Essa rota serve para cadastrar um formulário",
+                "tags": ["Clientes"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "hobbies": {
+                                        "type": "string",
+                                        "example": "Jogar"
+                                    },
+                                    "fumante": {
+                                        "type": "boolean",
+                                        "example": "true"
+                                    },
+                                    "registro_conducao": {
+                                        "type": "string",
+                                        "example": "true"
+                                    },
+                                    "faixa_renda": {
+                                        "type": "number",
+                                        "example": "1000"
+                                    },
+                                    "politicamente_exposto": {
+                                        "type": "boolean",
+                                        "example": "true"
+                                    },
+                                    "vinculo_politico": {
+                                        "type": "boolean",
+                                        "example": "true"
+                                    },
+                                    "profissao": {
+                                        "type": "string",
+                                        "example": "Programador"
+                                    },
+                                    "risco_profissao": {
+                                        "type": "boolean",
+                                        "example": "true"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Formulário cadastrado com sucesso",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "$ref": "#/components/schemas/Formulario"
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Formulário não cadastrado"
+                        },
+                        "500": {
+                            "description": "Erro interno do servidor"
+                        }
+                    }
+                }
+            }
+        },
+        "/client/": {
+            "get": {
+                "summary": "Buscar todos os clientes",
+                "description": "Essa rota serve para buscar todos os clientes",
+                "tags": ["Clientes"],
+                "responses": {
+                    "200": {
+                        "description": "Clientes encontrados com sucesso"
+                    },
+                    "400": {
+                        "description": "Clientes não encontrados"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/client/update/{id}": {
+            "put": {
+                "summary": "Atualizar cliente",
+                "description": "Essa rota serve para atualizar um cliente",
+                "tags": ["Clientes"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Cliente"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cliente atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Cliente"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Cliente não atualizado"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/client/delete/{id}": {
+            "delete": {
+                "summary": "Deletar cliente",
+                "description": "Essa rota serve para deletar um cliente",
+                "tags": ["Clientes"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cliente deletado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Cliente"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Cliente não deletado"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "summary": "Buscar usuário",
+                "description": "Essa rota serve para buscar um usuário",
+                "tags": ["Usuários"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário encontrado com sucesso",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/users/update/{id}": {
+            "put": {
+                "summary": "Atualizar usuário",
+                "description": "Essa rota serve para atualizar um usuário",
+                "tags": ["Usuários"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Users"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Users"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Usuário não atualizado"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "teste@teste.com"
+                    },
+                    "senha": {
+                        "type": "string",
+                        "example": "123456"
+                    }
+                }
+            },
+            "Cliente": {
+                "type": "object",
+                "properties": {
+                    "nm_pessoa": {
+                        "type": "string",
+                        "example": "LUCAS"
+                    },
+                    "num_rg": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "num_cpf_cnpj": {
+                        "type": "string",
+                        "example": "123456789"
+                    },
+                    "dt_nascimento": {
+                        "type": "string",
+                        "example": "1999-12-31"
+                    },
+                    "genero": {
+                        "type": "string",
+                        "example": "MASCULINO"
+                    },
+                    "num_contato": {
+                        "type": "string",
+                        "example": "13981706262"
+                    },
+                    "estado_civil": {
+                        "type": "string",
+                        "example": "SOLTEIRO"
+                    },
+                    "nacionalidade": {
+                        "type": "string",
+                        "example": "Brasileiro"
+                    },
+                    "reside_brasil": {
+                        "type": "boolean",
+                        "example": "true"
+                    }
+                }
+            },
+            "Users": {
+                "type": "object",
+                "properties": {
+                    "usuario": {
+                        "type": "string",
+                        "example": "LUCAS"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "teste@teste.com"
+                    },
+                    "senha": {
+                        "type": "string",
+                        "example": "123456"
+                    },
+                    "confirmSenha": {
+                        "type": "string",
+                        "example": "123456"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
