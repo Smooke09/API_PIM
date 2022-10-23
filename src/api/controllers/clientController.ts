@@ -196,31 +196,53 @@ export const remove = async (
   }
 };
 
+// Addicioanr a pessoa ao usuario
 export const addPessoa = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const { id } = req.params;
+
+  // Checando se ja existe formulario preenchido
+  const checkUser = await prisma.tb_cliente.findFirst({
+    where: {
+      pessoa_key: Number(id),
+    },
+  });
+
+  //Validando
+  if (checkUser) {
+    next(Error.badRequest("Formulario já preenchido, Aguarde a reposta"));
+    return;
+  }
+
   try {
-    const { id } = req.params;
+    const {
+      hobbies,
+      fuma,
+      registro_conducao,
+      faixa_renda,
+      politicamente_exposto,
+      vinculo_politicamente_exposto,
+      profissao,
+      risco_profissao,
+    } = req.body;
 
-    const newBody = req.body;
+    const data = {
+      hobbies,
+      fuma,
+      pessoa_key: Number(id),
+      registro_conducao,
+      faixa_renda,
+      politicamente_exposto,
+      vinculo_politicamente_exposto,
+      profissao,
+    };
 
-    console.log(newBody);
-
-    const newClient = await prisma.tb_cliente.create({
-      data: {
-        hobbies: newBody.hobbies,
-        fuma: newBody.fuma,
-        registro_conducao: newBody.registro_conducao,
-        pessoa_key: Number(id),
-        faixa_renda: newBody.faixa_renda,
-        politicamente_exposto: newBody.politicamente_exposto,
-        vinculo_politicamente_exposto: newBody.vinculo_politicamente_exposto,
-        risco_profissao: newBody.risco_profissao,
-        profissao: newBody.profissao,
-      },
-    });
+    // const newClient = await prisma.tb_cliente.create({
+    //   data,
+    // });
     res.status(201).json(newClient);
   } catch (error: any) {
     next(Error.badRequest(error.message));
