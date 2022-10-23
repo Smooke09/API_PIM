@@ -163,24 +163,35 @@ const remove = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.remove = remove;
+// Addicioanr a pessoa ao usuario
 const addPessoa = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    // Checando se ja existe formulario preenchido
+    const checkUser = yield prisma_1.default.tb_cliente.findFirst({
+        where: {
+            pessoa_key: Number(id),
+        },
+    });
+    //Validando
+    if (checkUser) {
+        next(error_1.Error.badRequest("Formulario já preenchido, Aguarde a reposta"));
+        return;
+    }
     try {
-        const { id } = req.params;
-        const newBody = req.body;
-        console.log(newBody);
-        const newClient = yield prisma_1.default.tb_cliente.create({
-            data: {
-                hobbies: newBody.hobbies,
-                fuma: newBody.fuma,
-                registro_conducao: newBody.registro_conducao,
-                pessoa_key: Number(id),
-                faixa_renda: newBody.faixa_renda,
-                politicamente_exposto: newBody.politicamente_exposto,
-                vinculo_politicamente_exposto: newBody.vinculo_politicamente_exposto,
-                risco_profissao: newBody.risco_profissao,
-                profissao: newBody.profissao,
-            },
-        });
+        const { hobbies, fuma, registro_conducao, faixa_renda, politicamente_exposto, vinculo_politicamente_exposto, profissao, risco_profissao, } = req.body;
+        const data = {
+            hobbies,
+            fuma,
+            pessoa_key: Number(id),
+            registro_conducao,
+            faixa_renda,
+            politicamente_exposto,
+            vinculo_politicamente_exposto,
+            profissao,
+        };
+        // const newClient = await prisma.tb_cliente.create({
+        //   data,
+        // });
         res.status(201).json(newClient);
     }
     catch (error) {

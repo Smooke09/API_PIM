@@ -77,6 +77,7 @@ const getId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
                 pessoa_key: true,
                 tb_pessoa: {
                     select: {
+                        id: true,
                         nm_pessoa: true,
                         num_rg: true,
                         num_cpf_cnpj: true,
@@ -86,6 +87,19 @@ const getId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
                         estado_civil: true,
                         nacionalidade: true,
                         reside_brasil: true,
+                        tb_cliente: {
+                            select: {
+                                id: true,
+                                hobbies: true,
+                                fuma: true,
+                                registro_conducao: true,
+                                faixa_renda: true,
+                                politicamente_exposto: true,
+                                vinculo_politicamente_exposto: true,
+                                profissao: true,
+                                risco_profissao: true,
+                            },
+                        },
                     },
                 },
             },
