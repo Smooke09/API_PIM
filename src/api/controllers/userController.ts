@@ -75,7 +75,6 @@ export const getId = async (
         id: true,
         usuario: true,
         email: true,
-        senha: true,
         pessoa_key: true,
         tb_pessoa: {
           select: {
