@@ -30,26 +30,25 @@ export const update = async (
     } else if (senha) {
       // Criptografa a senha
       const hash = await bcryptConfig(senha);
-      req.body.senha = hash;
+      const newSenha = hash;
+      const user = {
+        usuario: usuario,
+        senha: newSenha,
+      };
+
+      // Atualiza o usuario
+      const userUpdated = await prisma.tb_usuario.update({
+        where: {
+          id: Number(id),
+        },
+        data: user,
+      });
+
+      console.log(userUpdated);
+
+      // Retorna o usuario atualizado
+      res.status(200).json("Usuário atualizado com sucesso");
     }
-
-    const user = {
-      usuario: usuario,
-      senha,
-    };
-
-    // Atualiza o usuario
-    const userUpdated = await prisma.tb_usuario.update({
-      where: {
-        id: Number(id),
-      },
-      data: user,
-    });
-
-    console.log(userUpdated);
-
-    // Retorna o usuario atualizado
-    res.status(200).json("Usuário atualizado com sucesso");
   } catch (err: any) {
     next(Error.badRequest(err.message));
     console.log(err);
