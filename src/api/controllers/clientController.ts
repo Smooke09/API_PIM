@@ -120,12 +120,9 @@ export const update = async (
         nm_pessoa: client.nm_pessoa,
         num_rg: client.num_rg,
         num_cpf_cnpj: client.num_cpf_cnpj,
-        dt_nascimento: new Date(client.dt_nascimento),
-        genero: client.genero,
         num_contato: client.num_contato,
         estado_civil: client.estado_civil,
-        nacionalidade: client.nacionalidade,
-        reside_brasil: client.reside_brasil,
+        // reside_brasil: client.reside_brasil,
       },
     });
 
