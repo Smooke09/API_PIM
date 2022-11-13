@@ -76,8 +76,7 @@ export const create = async (
 
     // validando Se o email ja existir retorna um erro
     if (userExists) {
-      next(Error.badRequest("Email já existe"));
-      return;
+      return next(Error.badRequest("Email já existe"));
     }
 
     // Criptografa a senha
@@ -98,7 +97,7 @@ export const create = async (
 
     res.status(201).json("Usuário criado com sucesso");
   } catch (err: any) {
-    // next(Error.badRequest(err.message));
+    next(Error.badRequest(err.message));
   }
 };
 
