@@ -244,3 +244,98 @@ export const addPessoa = async (
     next(Error.badRequest(error.message));
   }
 };
+
+// Pegando o formulario do cliente pelo id
+export const getForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    const client = await prisma.tb_cliente.findFirst({
+      where: {
+        pessoa_key: Number(id),
+      },
+      include: {
+        tb_pessoa: true,
+      },
+    });
+
+    if (!client) {
+      next(Error.notFound(`Cliente do id: ${id} não encontrado!`));
+      return;
+    }
+
+    return res.status(200).json(client);
+  } catch (error: any) {
+    next(Error.badRequest(error.message));
+  }
+};
+
+// Pegando todos os formularios
+export const getAllForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const client = await prisma.tb_cliente.findMany({
+      include: {
+        tb_pessoa: true,
+      },
+    });
+
+    res.status(200).json(client);
+  } catch (error: any) {
+    next(Error.badRequest(error.message));
+  }
+};
+
+// Atualizando o formulario
+
+export const updateForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    const {
+      hobbies,
+      fuma,
+      registro_conducao,
+      faixa_renda,
+      politicamente_exposto,
+      vinculo_politicamente_exposto,
+      profissao,
+      risco_profissao,
+    } = req.body;
+
+    const data = {
+      hobbies,
+      fuma,
+      registro_conducao,
+      faixa_renda,
+      politicamente_exposto,
+      vinculo_politicamente_exposto,
+      profissao,
+      risco_profissao,
+    };
+
+    const updateClient = await prisma.tb_cliente.update({
+      where: {
+        id: Number(id),
+      },
+      data,
+    });
+
+    res
+      .status(200)
+      .json({ message: `O Cliente do id:${id} foi atualizado com sucesso!` });
+  } catch (error: any) {
+    next(Error.badRequest(error.message));
+  }
+};
