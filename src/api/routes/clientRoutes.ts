@@ -20,9 +20,11 @@ clientRoutes.get("/", getAll);
 clientRoutes.put("/update/:id", update);
 clientRoutes.delete("/delete/:id", remove);
 clientRoutes.post("/create", create);
-clientRoutes.post("/form/create/:id", addPessoa);
+
+//Crud de Formulario
 clientRoutes.get("/form/get/all", getAllForm);
-clientRoutes.patch("/form/:id", updateForm);
 clientRoutes.get("/form/unity/:id", getForm);
+clientRoutes.post("/form/create/:id", addPessoa);
+clientRoutes.patch("/form/:id", updateForm);
 
 export default clientRoutes;

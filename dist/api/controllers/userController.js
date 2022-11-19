@@ -36,22 +36,22 @@ const update = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         else if (senha) {
             // Criptografa a senha
             const hash = yield (0, bcryptConfig_1.default)(senha);
-            req.body.senha = hash;
+            const newSenha = hash;
+            const user = {
+                usuario: usuario,
+                senha: newSenha,
+            };
+            // Atualiza o usuario
+            const userUpdated = yield prisma_1.default.tb_usuario.update({
+                where: {
+                    id: Number(id),
+                },
+                data: user,
+            });
+            console.log(userUpdated);
+            // Retorna o usuario atualizado
+            res.status(200).json("Usuário atualizado com sucesso");
         }
-        const user = {
-            usuario: usuario,
-            senha,
-        };
-        // Atualiza o usuario
-        const userUpdated = yield prisma_1.default.tb_usuario.update({
-            where: {
-                id: Number(id),
-            },
-            data: user,
-        });
-        console.log(userUpdated);
-        // Retorna o usuario atualizado
-        res.status(200).json("Usuário atualizado com sucesso");
     }
     catch (err) {
         next(error_1.Error.badRequest(err.message));
@@ -73,7 +73,6 @@ const getId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
                 id: true,
                 usuario: true,
                 email: true,
-                senha: true,
                 pessoa_key: true,
                 tb_pessoa: {
                     select: {

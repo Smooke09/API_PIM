@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addPessoa = exports.remove = exports.getAll = exports.getId = exports.update = exports.create = void 0;
+exports.updateForm = exports.getAllForm = exports.getForm = exports.addPessoa = exports.remove = exports.getAll = exports.getId = exports.update = exports.create = void 0;
 // import { token } from "../Config/token";
 const prisma_1 = __importDefault(require("../services/prisma"));
 const error_1 = require("../entities/error");
@@ -65,8 +65,7 @@ const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         });
         // validando Se o email ja existir retorna um erro
         if (userExists) {
-            next(error_1.Error.badRequest("Email já existe"));
-            return;
+            return next(error_1.Error.badRequest("Email já existe"));
         }
         // Criptografa a senha
         const hash = yield (0, bcryptConfig_1.default)(data.senha);
@@ -84,7 +83,7 @@ const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         res.status(201).json("Usuário criado com sucesso");
     }
     catch (err) {
-        // next(Error.badRequest(err.message));
+        next(error_1.Error.badRequest(err.message));
     }
 });
 exports.create = create;
@@ -100,12 +99,9 @@ const update = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
                 nm_pessoa: client.nm_pessoa,
                 num_rg: client.num_rg,
                 num_cpf_cnpj: client.num_cpf_cnpj,
-                dt_nascimento: new Date(client.dt_nascimento),
-                genero: client.genero,
                 num_contato: client.num_contato,
                 estado_civil: client.estado_civil,
-                nacionalidade: client.nacionalidade,
-                reside_brasil: client.reside_brasil,
+                // reside_brasil: client.reside_brasil,
             },
         });
         res
@@ -199,4 +195,72 @@ const addPessoa = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.addPessoa = addPessoa;
+// Pegando o formulario do cliente pelo id
+const getForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const client = yield prisma_1.default.tb_cliente.findFirst({
+            where: {
+                pessoa_key: Number(id),
+            },
+            include: {
+                tb_pessoa: true,
+            },
+        });
+        if (!client) {
+            next(error_1.Error.notFound(`Cliente do id: ${id} não encontrado!`));
+            return;
+        }
+        return res.status(200).json(client);
+    }
+    catch (error) {
+        next(error_1.Error.badRequest(error.message));
+    }
+});
+exports.getForm = getForm;
+// Pegando todos os formularios
+const getAllForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const client = yield prisma_1.default.tb_cliente.findMany({
+            include: {
+                tb_pessoa: true,
+            },
+        });
+        res.status(200).json(client);
+    }
+    catch (error) {
+        next(error_1.Error.badRequest(error.message));
+    }
+});
+exports.getAllForm = getAllForm;
+// Atualizando o formulario
+const updateForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const { hobbies, fuma, registro_conducao, faixa_renda, politicamente_exposto, vinculo_politicamente_exposto, profissao, risco_profissao, } = req.body;
+        const data = {
+            hobbies,
+            fuma,
+            registro_conducao,
+            faixa_renda,
+            politicamente_exposto,
+            vinculo_politicamente_exposto,
+            profissao,
+            risco_profissao,
+        };
+        const updateClient = yield prisma_1.default.tb_cliente.update({
+            where: {
+                id: Number(id),
+            },
+            data,
+        });
+        res
+            .status(200)
+            .json({ message: `O Cliente do id:${id} foi atualizado com sucesso!` });
+    }
+    catch (error) {
+        next(error_1.Error.badRequest(error.message));
+    }
+});
+exports.updateForm = updateForm;
 //# sourceMappingURL=clientController.js.map
