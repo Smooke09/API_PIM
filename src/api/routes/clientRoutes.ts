@@ -21,8 +21,8 @@ clientRoutes.put("/update/:id", update);
 clientRoutes.delete("/delete/:id", remove);
 clientRoutes.post("/create", create);
 clientRoutes.post("/form/create/:id", addPessoa);
-clientRoutes.get("/form/all", getAllForm);
+clientRoutes.get("/form/get/all", getAllForm);
 clientRoutes.patch("/form/:id", updateForm);
-clientRoutes.get("/form/:id", getForm);
+clientRoutes.get("/form/unity/:id", getForm);
 
 export default clientRoutes;
