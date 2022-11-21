@@ -9,6 +9,7 @@ import {
   getForm,
   getAllForm,
   updateForm,
+  deleteForm,
 } from "../controllers/clientController";
 // import clientSchema from "../validations/clientSchema";
 
@@ -26,5 +27,6 @@ clientRoutes.get("/form/get/all", getAllForm);
 clientRoutes.get("/form/unity/:id", getForm);
 clientRoutes.post("/form/create/:id", addPessoa);
 clientRoutes.patch("/form/:id", updateForm);
+clientRoutes.delete("/form/:id", deleteForm);
 
 export default clientRoutes;

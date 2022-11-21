@@ -254,12 +254,12 @@ export const getForm = async (
   const { id } = req.params;
 
   try {
-    const client = await prisma.tb_cliente.findFirst({
+    const client = await prisma.tb_chamado.findFirst({
       where: {
-        pessoa_key: Number(id),
+        id: Number(id),
       },
       include: {
-        tb_pessoa: true,
+        tb_cliente: true,
       },
     });
 
@@ -281,9 +281,9 @@ export const getAllForm = async (
   next: NextFunction
 ) => {
   try {
-    const client = await prisma.tb_cliente.findMany({
+    const client = await prisma.tb_chamado.findMany({
       include: {
-        tb_pessoa: true,
+        tb_cliente: true,
       },
     });
 
@@ -294,7 +294,6 @@ export const getAllForm = async (
 };
 
 // Atualizando o formulario
-
 export const updateForm = async (
   req: Request,
   res: Response,
@@ -325,16 +324,47 @@ export const updateForm = async (
       risco_profissao,
     };
 
-    const updateClient = await prisma.tb_cliente.update({
+    const formUpdate = await prisma.tb_chamado.update({
       where: {
         id: Number(id),
       },
-      data,
+      data: {
+        tb_cliente: {
+          update: data,
+        },
+      },
+
+      include: {
+        tb_cliente: true,
+      },
+    });
+
+    res.status(200).json({
+      message: `O Formulario do id:${id} foi atualizado com sucesso!`,
+      formUpdate,
+    });
+  } catch (error: any) {
+    next(Error.badRequest(error.message));
+  }
+};
+
+export const deleteForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    const client = await prisma.tb_chamado.delete({
+      where: {
+        id: Number(id),
+      },
     });
 
     res
       .status(200)
-      .json({ message: `O Cliente do id:${id} foi atualizado com sucesso!` });
+      .json({ message: `O Formulario do id:${id} foi deletado com sucesso!` });
   } catch (error: any) {
     next(Error.badRequest(error.message));
   }
