@@ -5,7 +5,7 @@ import {
   getId,
   update,
   remove,
-  addPessoa,
+  addForm,
   getForm,
   getAllForm,
   updateForm,
@@ -25,7 +25,7 @@ clientRoutes.post("/create", create);
 //Crud de Formulario
 clientRoutes.get("/form/get/all", getAllForm);
 clientRoutes.get("/form/unity/:id", getForm);
-clientRoutes.post("/form/create/:id", addPessoa);
+clientRoutes.post("/form/create", addForm);
 clientRoutes.patch("/form/:id", updateForm);
 clientRoutes.delete("/form/:id", deleteForm);
 

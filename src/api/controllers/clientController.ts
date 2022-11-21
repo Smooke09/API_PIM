@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import e, { Request, Response, NextFunction } from "express";
 import { Client } from "../interfaces/client";
 // import { token } from "../Config/token";
 import prisma from "../services/prisma";
@@ -193,53 +193,57 @@ export const remove = async (
 };
 
 // Addicioanr a pessoa ao usuario
-export const addPessoa = async (
+export const addForm = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  // const { id } = req.params;
 
   // Checando se ja existe formulario preenchido
-  const checkUser = await prisma.tb_cliente.findFirst({
-    where: {
-      pessoa_key: Number(id),
-    },
-  });
-
-  //Validando
-  if (checkUser) {
-    next(Error.badRequest("Formulario já preenchido, Aguarde a reposta"));
-    return;
-  }
 
   try {
-    const {
-      hobbies,
-      fuma,
-      registro_conducao,
-      faixa_renda,
-      politicamente_exposto,
-      vinculo_politicamente_exposto,
-      profissao,
-      risco_profissao,
-    } = req.body;
+    const { client, funcionario_id, status, pessoa_key } = req.body;
 
-    const data = {
-      hobbies,
-      fuma,
-      pessoa_key: Number(id),
-      registro_conducao,
-      faixa_renda,
-      politicamente_exposto,
-      vinculo_politicamente_exposto,
-      profissao,
-    };
+    const checkForm = await prisma.tb_chamado.findFirst({
+      where: {
+        cliente_id: pessoa_key,
+      },
+    });
 
-    // const newClient = await prisma.tb_cliente.create({
-    //   data,
-    // });
-    res.status(201).json(newClient);
+    if (checkForm) {
+      return next(Error.badRequest("Formulario já preenchido"));
+    }
+
+    const newClient = await prisma.tb_cliente.create({
+      data: {
+        hobbies: req.body.hobbies,
+        fuma: req.body.fuma,
+        registro_conducao: req.body.registro_conducao,
+        pessoa_key: req.body.pessoa_key,
+        faixa_renda: req.body.faixa_renda,
+        politicamente_exposto: req.body.politicamente_exposto,
+        vinculo_politicamente_exposto: req.body.vinculo_politicamente_exposto,
+        risco_profissao: req.body.risco_profissao,
+        profissao: req.body.profissao,
+        funcionario_key: req.body.funcionario_key,
+      },
+    });
+
+    if (!newClient) {
+      next(Error.badRequest("Erro ao criar cliente"));
+      return;
+    }
+
+    const newChamado = await prisma.tb_chamado.create({
+      data: {
+        cliente_id: newClient.id,
+        funcionario_id,
+        status,
+      },
+    });
+
+    res.status(201).json(newChamado);
   } catch (error: any) {
     next(Error.badRequest(error.message));
   }
