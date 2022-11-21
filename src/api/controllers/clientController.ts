@@ -258,12 +258,17 @@ export const getForm = async (
   const { id } = req.params;
 
   try {
-    const client = await prisma.tb_chamado.findFirst({
+    if (!id) {
+      next(Error.badRequest("Id não informado"));
+      return;
+    }
+
+    const client = await prisma.tb_cliente.findFirst({
       where: {
         id: Number(id),
       },
       include: {
-        tb_cliente: true,
+        tb_chamado: true,
       },
     });
 

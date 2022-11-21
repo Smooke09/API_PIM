@@ -17,7 +17,23 @@ export const login = async (
       where: {
         email: email,
       },
+
+      include: {
+        tb_pessoa: true,
+      },
     });
+
+    const newCliente = await prisma.tb_pessoa.findFirst({
+      where: {
+        id: Number(user.pessoa_key),
+      },
+
+      include: {
+        tb_cliente: true,
+      },
+    });
+
+    console.log(newCliente);
 
     // Se o email nao existir retorna um erro
     if (!user) {
@@ -25,7 +41,8 @@ export const login = async (
       return;
     } else {
       // Verificando se a senha esta correta
-      const isPasswordCorrect = await bcrypt.compare(senha, user!.senha!);
+      const isPasswordCorrect = await bcrypt.compare(senha, user.senha);
+
       if (!isPasswordCorrect) {
         next(Error.badRequest("Senha incorreta"));
         return;
@@ -40,7 +57,11 @@ export const login = async (
     // Se tudo estiver correto retorna o usuario
     res.status(200).json({
       message: "Login realizado com sucesso",
-      user: { id: user!.id, email: user!.email },
+      user: {
+        id: user.id,
+        email: user.email,
+        id_pessoa: newCliente?.tb_cliente[0]?.id,
+      },
       token: token,
     });
   } catch (err: any) {
