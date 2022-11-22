@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateForm = exports.getAllForm = exports.getForm = exports.addPessoa = exports.remove = exports.getAll = exports.getId = exports.update = exports.create = void 0;
+exports.deleteForm = exports.updateForm = exports.getAllForm = exports.getForm = exports.addForm = exports.updatePessoa = exports.remove = exports.getAll = exports.getId = exports.update = exports.create = void 0;
 // import { token } from "../Config/token";
 const prisma_1 = __importDefault(require("../services/prisma"));
 const error_1 = require("../entities/error");
@@ -159,52 +159,94 @@ const remove = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.remove = remove;
-// Addicioanr a pessoa ao usuario
-const addPessoa = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    // Checando se ja existe formulario preenchido
-    const checkUser = yield prisma_1.default.tb_cliente.findFirst({
-        where: {
-            pessoa_key: Number(id),
-        },
-    });
-    //Validando
-    if (checkUser) {
-        next(error_1.Error.badRequest("Formulario já preenchido, Aguarde a reposta"));
-        return;
-    }
+const updatePessoa = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { id } = req.params;
         const { hobbies, fuma, registro_conducao, faixa_renda, politicamente_exposto, vinculo_politicamente_exposto, profissao, risco_profissao, } = req.body;
-        const data = {
-            hobbies,
-            fuma,
-            pessoa_key: Number(id),
-            registro_conducao,
-            faixa_renda,
-            politicamente_exposto,
-            vinculo_politicamente_exposto,
-            profissao,
-        };
-        // const newClient = await prisma.tb_cliente.create({
-        //   data,
-        // });
-        res.status(201).json(newClient);
+        const updatePessoa = yield prisma_1.default.tb_cliente.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                hobbies: hobbies,
+                fuma: fuma,
+                registro_conducao: registro_conducao,
+                faixa_renda: faixa_renda,
+                politicamente_exposto,
+                vinculo_politicamente_exposto,
+                profissao,
+                risco_profissao,
+            },
+        });
+        res
+            .status(200)
+            .json({ message: `O Cliente do id:${id} foi atualizado com sucesso!` });
     }
     catch (error) {
         next(error_1.Error.badRequest(error.message));
     }
 });
-exports.addPessoa = addPessoa;
+exports.updatePessoa = updatePessoa;
+// Addicioanr a pessoa ao usuario
+const addForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // const { id } = req.params;
+    // Checando se ja existe formulario preenchido
+    try {
+        const { client, funcionario_id, status, pessoa_key } = req.body;
+        // const checkForm = await prisma.tb_chamado.findFirst({
+        //   where: {
+        //     cliente_id: pessoa_key,
+        //   },
+        // });
+        // if (checkForm) {
+        //   return next(Error.badRequest("Formulario já preenchido"));
+        // }
+        const newClient = yield prisma_1.default.tb_cliente.create({
+            data: {
+                hobbies: req.body.hobbies,
+                fuma: req.body.fuma,
+                registro_conducao: req.body.registro_conducao,
+                pessoa_key: req.body.pessoa_key,
+                faixa_renda: req.body.faixa_renda,
+                politicamente_exposto: req.body.politicamente_exposto,
+                vinculo_politicamente_exposto: req.body.vinculo_politicamente_exposto,
+                risco_profissao: req.body.risco_profissao,
+                profissao: req.body.profissao,
+                funcionario_key: req.body.funcionario_key,
+            },
+        });
+        if (!newClient) {
+            next(error_1.Error.badRequest("Erro ao criar cliente"));
+            return;
+        }
+        const newChamado = yield prisma_1.default.tb_chamado.create({
+            data: {
+                cliente_id: newClient.id,
+                funcionario_id,
+                status,
+            },
+        });
+        res.status(201).json(newChamado);
+    }
+    catch (error) {
+        next(error_1.Error.badRequest(error.message));
+    }
+});
+exports.addForm = addForm;
 // Pegando o formulario do cliente pelo id
 const getForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
+        if (!id) {
+            next(error_1.Error.badRequest("Id não informado"));
+            return;
+        }
         const client = yield prisma_1.default.tb_cliente.findFirst({
             where: {
-                pessoa_key: Number(id),
+                id: Number(id),
             },
             include: {
-                tb_pessoa: true,
+                tb_chamado: true,
             },
         });
         if (!client) {
@@ -221,9 +263,9 @@ exports.getForm = getForm;
 // Pegando todos os formularios
 const getAllForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const client = yield prisma_1.default.tb_cliente.findMany({
+        const client = yield prisma_1.default.tb_chamado.findMany({
             include: {
-                tb_pessoa: true,
+                tb_cliente: true,
             },
         });
         res.status(200).json(client);
@@ -237,30 +279,42 @@ exports.getAllForm = getAllForm;
 const updateForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const { hobbies, fuma, registro_conducao, faixa_renda, politicamente_exposto, vinculo_politicamente_exposto, profissao, risco_profissao, } = req.body;
-        const data = {
-            hobbies,
-            fuma,
-            registro_conducao,
-            faixa_renda,
-            politicamente_exposto,
-            vinculo_politicamente_exposto,
-            profissao,
-            risco_profissao,
-        };
-        const updateClient = yield prisma_1.default.tb_cliente.update({
+        const { status, data, funcionario_resp } = req.body;
+        const formUpdate = yield prisma_1.default.tb_chamado.update({
             where: {
                 id: Number(id),
             },
-            data,
+            data: {
+                status,
+                data,
+                funcionario_resp,
+            },
         });
-        res
-            .status(200)
-            .json({ message: `O Cliente do id:${id} foi atualizado com sucesso!` });
+        res.status(200).json({
+            message: `O Formulario do id:${id} foi atualizado com sucesso!`,
+            formUpdate,
+        });
     }
     catch (error) {
         next(error_1.Error.badRequest(error.message));
     }
 });
 exports.updateForm = updateForm;
+const deleteForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const client = yield prisma_1.default.tb_chamado.delete({
+            where: {
+                id: Number(id),
+            },
+        });
+        res
+            .status(200)
+            .json({ message: `O Formulario do id:${id} foi deletado com sucesso!` });
+    }
+    catch (error) {
+        next(error_1.Error.badRequest(error.message));
+    }
+});
+exports.deleteForm = deleteForm;
 //# sourceMappingURL=clientController.js.map

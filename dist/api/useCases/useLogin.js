@@ -18,6 +18,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const error_1 = require("../entities/error");
 const jsonwebtoken_1 = require("jsonwebtoken");
 const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const { id, email, senha } = req.body;
         // Verificando se o usuario existe
@@ -25,7 +26,19 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
             where: {
                 email: email,
             },
+            include: {
+                tb_pessoa: true,
+            },
         });
+        const newCliente = yield prisma_1.default.tb_pessoa.findFirst({
+            where: {
+                id: Number(user.pessoa_key),
+            },
+            include: {
+                tb_cliente: true,
+            },
+        });
+        console.log(newCliente);
         // Se o email nao existir retorna um erro
         if (!user) {
             next(error_1.Error.badRequest("Email nao encontrado"));
@@ -46,7 +59,11 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         // Se tudo estiver correto retorna o usuario
         res.status(200).json({
             message: "Login realizado com sucesso",
-            user: { id: user.id, email: user.email },
+            user: {
+                id: user.id,
+                email: user.email,
+                id_pessoa: (_a = newCliente === null || newCliente === void 0 ? void 0 : newCliente.tb_cliente[0]) === null || _a === void 0 ? void 0 : _a.id,
+            },
             token: token,
         });
     }

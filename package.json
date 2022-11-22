@@ -5,6 +5,7 @@
   "license": "BSD-2-Clause",
   "scripts": {
     "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules src/loader",
+    "build": "tsc",
     "start": "node dist/loader.js",
     "prisma": "npx prisma generate",
     "prismaPull": "npx prisma db pull"
