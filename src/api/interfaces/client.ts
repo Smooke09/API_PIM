@@ -6,9 +6,9 @@ export interface Client {
   num_rg?: string;
   num_cpf_cnpj?: string;
   dt_nascimento: Date;
-  genero?: string;
+  genero?: string | null;
   num_contato?: string;
-  estado_civil?: string;
+  estado_civil?: string | null;
   nacionalidade: string;
   reside_brasil: boolean;
 }

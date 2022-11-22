@@ -22,7 +22,6 @@ const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         //criando client
         const client = req.body;
         const { nm_pessoa, num_rg, num_cpf_cnpj, dt_nascimento, genero, num_contato, estado_civil, nacionalidade, reside_brasil, } = client;
-        const newBody = req.body;
         // client
         const newClient = yield prisma_1.default.tb_pessoa.create({
             data: {
@@ -192,7 +191,7 @@ const addForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
     // const { id } = req.params;
     // Checando se ja existe formulario preenchido
     try {
-        const { client, funcionario_id, status, pessoa_key } = req.body;
+        const { client, funcionario_resp, status, pessoa_key } = req.body;
         // const checkForm = await prisma.tb_chamado.findFirst({
         //   where: {
         //     cliente_id: pessoa_key,
@@ -212,7 +211,6 @@ const addForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
                 vinculo_politicamente_exposto: req.body.vinculo_politicamente_exposto,
                 risco_profissao: req.body.risco_profissao,
                 profissao: req.body.profissao,
-                funcionario_key: req.body.funcionario_key,
             },
         });
         if (!newClient) {
@@ -222,7 +220,7 @@ const addForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         const newChamado = yield prisma_1.default.tb_chamado.create({
             data: {
                 cliente_id: newClient.id,
-                funcionario_id,
+                funcionario_resp,
                 status,
             },
         });

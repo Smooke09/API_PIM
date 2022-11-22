@@ -3,7 +3,6 @@ import { Client } from "../interfaces/client";
 // import { token } from "../Config/token";
 import prisma from "../services/prisma";
 import { Error } from "../entities/error";
-import { userClientScheme } from "../validations/userSchema";
 import bcryptConfig from "../../Config/bcryptConfig";
 
 export const create = async (
@@ -13,7 +12,7 @@ export const create = async (
 ) => {
   try {
     //criando client
-    const client: Client = req.body;
+    const client = req.body;
 
     const {
       nm_pessoa,
@@ -26,8 +25,6 @@ export const create = async (
       nacionalidade,
       reside_brasil,
     } = client;
-
-    const newBody = req.body;
 
     // client
     const newClient = await prisma.tb_pessoa.create({
@@ -109,7 +106,7 @@ export const update = async (
   try {
     const { id } = req.params;
 
-    const client: Client = req.body;
+    const client = req.body;
 
     const updateClient = await prisma.tb_pessoa.update({
       where: {
@@ -245,7 +242,7 @@ export const addForm = async (
 
   // Checando se ja existe formulario preenchido
   try {
-    const { client, funcionario_id, status, pessoa_key } = req.body;
+    const { client, funcionario_resp, status, pessoa_key } = req.body;
 
     // const checkForm = await prisma.tb_chamado.findFirst({
     //   where: {
@@ -268,7 +265,6 @@ export const addForm = async (
         vinculo_politicamente_exposto: req.body.vinculo_politicamente_exposto,
         risco_profissao: req.body.risco_profissao,
         profissao: req.body.profissao,
-        funcionario_key: req.body.funcionario_key,
       },
     });
 
@@ -280,7 +276,7 @@ export const addForm = async (
     const newChamado = await prisma.tb_chamado.create({
       data: {
         cliente_id: newClient.id,
-        funcionario_id,
+        funcionario_resp,
         status,
       },
     });

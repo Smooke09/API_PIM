@@ -15,7 +15,7 @@ const jsonwebtoken_1 = require("jsonwebtoken");
 const authTokenMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { authorization } = req.headers;
     if (!authorization) {
-        next(error_1.Error.unauthorized("Token não informado"));
+        next(error_1.Error.unauthorize("Token não informado"));
         return;
     }
     const [, token] = authorization.split(" ");

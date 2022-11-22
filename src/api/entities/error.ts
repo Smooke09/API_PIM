@@ -1,5 +1,3 @@
-import { string } from "yup";
-
 export class Error {
   message: string;
   code: number;

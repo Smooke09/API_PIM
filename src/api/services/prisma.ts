@@ -1,9 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import * as PrismaClient from "@prisma/client";
 
-const prisma = new PrismaClient();
-
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
+export const prisma = new PrismaClient.PrismaClient();
 
 export default prisma;
