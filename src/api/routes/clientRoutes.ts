@@ -10,6 +10,7 @@ import {
   getAllForm,
   updateForm,
   deleteForm,
+  updatePessoa,
 } from "../controllers/clientController";
 
 const clientRoutes = Router();
@@ -20,6 +21,9 @@ clientRoutes.get("/", getAll);
 clientRoutes.put("/update/:id", update);
 clientRoutes.delete("/delete/:id", remove);
 clientRoutes.post("/create", create);
+
+// Pessoa Fisica
+clientRoutes.put("/pessoa/update/:id", updatePessoa);
 
 //Crud de Formulario
 clientRoutes.get("/form/get/all", getAllForm);

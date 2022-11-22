@@ -192,6 +192,49 @@ export const remove = async (
   }
 };
 
+export const updatePessoa = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      hobbies,
+      fuma,
+      registro_conducao,
+      faixa_renda,
+      politicamente_exposto,
+      vinculo_politicamente_exposto,
+      profissao,
+      risco_profissao,
+    } = req.body;
+
+    const updatePessoa = await prisma.tb_cliente.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        hobbies: hobbies,
+        fuma: fuma,
+        registro_conducao: registro_conducao,
+        faixa_renda: faixa_renda,
+        politicamente_exposto,
+        vinculo_politicamente_exposto,
+        profissao,
+        risco_profissao,
+      },
+    });
+
+    res
+      .status(200)
+      .json({ message: `O Cliente do id:${id} foi atualizado com sucesso!` });
+  } catch (error: any) {
+    next(Error.badRequest(error.message));
+  }
+};
+
 // Addicioanr a pessoa ao usuario
 export const addForm = async (
   req: Request,
@@ -310,7 +353,7 @@ export const updateForm = async (
   const { id } = req.params;
 
   try {
-    const { status, data } = req.body;
+    const { status, data, funcionario_resp } = req.body;
 
     const formUpdate = await prisma.tb_chamado.update({
       where: {
@@ -319,6 +362,7 @@ export const updateForm = async (
       data: {
         status,
         data,
+        funcionario_resp,
       },
     });
 

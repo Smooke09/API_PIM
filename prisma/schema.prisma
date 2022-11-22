@@ -76,12 +76,12 @@ model tb_beneficiario {
 }
 
 model tb_chamado {
-  id         Int         @id @default(autoincrement())
-  data       DateTime?   @db.Timestamp(6)
-  cliente    String?     @db.VarChar(255)
-  cliente_id Int?
-  status     String?
-  tb_cliente tb_cliente? @relation(fields: [cliente_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_chamado_cliente")
+  id               Int         @id @default(autoincrement())
+  data             DateTime?   @db.Timestamp(6)
+  cliente_id       Int?
+  status           String?
+  funcionario_resp String?
+  tb_cliente       tb_cliente? @relation(fields: [cliente_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_chamado_cliente")
 }
 
 model tb_cliente {
