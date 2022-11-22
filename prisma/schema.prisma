@@ -76,14 +76,12 @@ model tb_beneficiario {
 }
 
 model tb_chamado {
-  id             Int             @id @default(autoincrement())
-  data           DateTime?       @db.Timestamp(6)
-  cliente        String?         @db.VarChar(255)
-  cliente_id     Int?
-  funcionario_id Int?
-  status         String?
-  tb_cliente     tb_cliente?     @relation(fields: [cliente_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_chamado_cliente")
-  tb_funcionario tb_funcionario? @relation(fields: [funcionario_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_chamado_funcionario")
+  id         Int         @id @default(autoincrement())
+  data       DateTime?   @db.Timestamp(6)
+  cliente    String?     @db.VarChar(255)
+  cliente_id Int?
+  status     String?
+  tb_cliente tb_cliente? @relation(fields: [cliente_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_chamado_cliente")
 }
 
 model tb_cliente {
@@ -98,9 +96,7 @@ model tb_cliente {
   vinculo_politicamente_exposto Boolean?
   profissao                     String?                   @db.VarChar(100)
   risco_profissao               risco_profissao?
-  funcionario_key               Int?
   tb_cliente_categoria          tb_cliente_categoria?     @relation(fields: [cliente_categoria_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  tb_funcionario                tb_funcionario?           @relation(fields: [funcionario_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
   tb_pessoa                     tb_pessoa?                @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
   rl_cliente_beneficiario       rl_cliente_beneficiario[]
   tb_chamado                    tb_chamado[]
@@ -164,8 +160,6 @@ model tb_funcionario {
   pessoa_key            Int?
   tb_pessoa             tb_pessoa?              @relation(fields: [pessoa_key], references: [id], onDelete: NoAction, onUpdate: NoAction)
   rl_funcionario_funcao rl_funcionario_funcao[]
-  tb_chamado            tb_chamado[]
-  tb_cliente            tb_cliente[]
   tb_oferta             tb_oferta[]
   tb_oferta_assinada    tb_oferta_assinada[]
 }

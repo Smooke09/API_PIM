@@ -201,19 +201,18 @@ export const addForm = async (
   // const { id } = req.params;
 
   // Checando se ja existe formulario preenchido
-
   try {
     const { client, funcionario_id, status, pessoa_key } = req.body;
 
-    const checkForm = await prisma.tb_chamado.findFirst({
-      where: {
-        cliente_id: pessoa_key,
-      },
-    });
+    // const checkForm = await prisma.tb_chamado.findFirst({
+    //   where: {
+    //     cliente_id: pessoa_key,
+    //   },
+    // });
 
-    if (checkForm) {
-      return next(Error.badRequest("Formulario já preenchido"));
-    }
+    // if (checkForm) {
+    //   return next(Error.badRequest("Formulario já preenchido"));
+    // }
 
     const newClient = await prisma.tb_cliente.create({
       data: {
@@ -311,40 +310,15 @@ export const updateForm = async (
   const { id } = req.params;
 
   try {
-    const {
-      hobbies,
-      fuma,
-      registro_conducao,
-      faixa_renda,
-      politicamente_exposto,
-      vinculo_politicamente_exposto,
-      profissao,
-      risco_profissao,
-    } = req.body;
-
-    const data = {
-      hobbies,
-      fuma,
-      registro_conducao,
-      faixa_renda,
-      politicamente_exposto,
-      vinculo_politicamente_exposto,
-      profissao,
-      risco_profissao,
-    };
+    const { status, data } = req.body;
 
     const formUpdate = await prisma.tb_chamado.update({
       where: {
         id: Number(id),
       },
       data: {
-        tb_cliente: {
-          update: data,
-        },
-      },
-
-      include: {
-        tb_cliente: true,
+        status,
+        data,
       },
     });
 

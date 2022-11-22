@@ -11,7 +11,6 @@ import {
   updateForm,
   deleteForm,
 } from "../controllers/clientController";
-// import clientSchema from "../validations/clientSchema";
 
 const clientRoutes = Router();
 
