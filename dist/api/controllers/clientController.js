@@ -256,6 +256,13 @@ const getForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
                 tb_pessoa: {
                     select: {
                         nm_pessoa: true,
+                        num_rg: true,
+                        num_cpf_cnpj: true,
+                        genero: true,
+                        dt_nascimento: true,
+                        num_contato: true,
+                        reside_brasil: true,
+                        nacionalidade: true,
                     },
                 },
                 tb_chamado: true,
@@ -295,6 +302,13 @@ const getAllForm = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
                         tb_pessoa: {
                             select: {
                                 nm_pessoa: true,
+                                num_rg: true,
+                                num_cpf_cnpj: true,
+                                genero: true,
+                                dt_nascimento: true,
+                                num_contato: true,
+                                reside_brasil: true,
+                                nacionalidade: true,
                             },
                         },
                     },

@@ -320,6 +320,13 @@ export const getForm = async (
         tb_pessoa: {
           select: {
             nm_pessoa: true,
+            num_rg: true,
+            num_cpf_cnpj: true,
+            genero: true,
+            dt_nascimento: true,
+            num_contato: true,
+            reside_brasil: true,
+            nacionalidade: true,
           },
         },
         tb_chamado: true,
@@ -364,6 +371,13 @@ export const getAllForm = async (
             tb_pessoa: {
               select: {
                 nm_pessoa: true,
+                num_rg: true,
+                num_cpf_cnpj: true,
+                genero: true,
+                dt_nascimento: true,
+                num_contato: true,
+                reside_brasil: true,
+                nacionalidade: true,
               },
             },
           },
