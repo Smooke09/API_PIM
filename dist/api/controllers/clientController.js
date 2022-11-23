@@ -243,7 +243,21 @@ const getForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
             where: {
                 id: Number(id),
             },
-            include: {
+            select: {
+                id: true,
+                hobbies: true,
+                fuma: true,
+                registro_conducao: true,
+                faixa_renda: true,
+                politicamente_exposto: true,
+                vinculo_politicamente_exposto: true,
+                profissao: true,
+                risco_profissao: true,
+                tb_pessoa: {
+                    select: {
+                        nm_pessoa: true,
+                    },
+                },
                 tb_chamado: true,
             },
         });
@@ -262,8 +276,29 @@ exports.getForm = getForm;
 const getAllForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const client = yield prisma_1.default.tb_chamado.findMany({
-            include: {
-                tb_cliente: true,
+            select: {
+                id: true,
+                cliente_id: true,
+                funcionario_resp: true,
+                status: true,
+                tb_cliente: {
+                    select: {
+                        id: true,
+                        hobbies: true,
+                        fuma: true,
+                        registro_conducao: true,
+                        faixa_renda: true,
+                        politicamente_exposto: true,
+                        vinculo_politicamente_exposto: true,
+                        profissao: true,
+                        risco_profissao: true,
+                        tb_pessoa: {
+                            select: {
+                                nm_pessoa: true,
+                            },
+                        },
+                    },
+                },
             },
         });
         res.status(200).json(client);

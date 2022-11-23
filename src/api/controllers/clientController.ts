@@ -305,7 +305,23 @@ export const getForm = async (
       where: {
         id: Number(id),
       },
-      include: {
+
+      select: {
+        id: true,
+        hobbies: true,
+        fuma: true,
+        registro_conducao: true,
+        faixa_renda: true,
+        politicamente_exposto: true,
+        vinculo_politicamente_exposto: true,
+        profissao: true,
+        risco_profissao: true,
+
+        tb_pessoa: {
+          select: {
+            nm_pessoa: true,
+          },
+        },
         tb_chamado: true,
       },
     });
@@ -329,8 +345,29 @@ export const getAllForm = async (
 ) => {
   try {
     const client = await prisma.tb_chamado.findMany({
-      include: {
-        tb_cliente: true,
+      select: {
+        id: true,
+        cliente_id: true,
+        funcionario_resp: true,
+        status: true,
+        tb_cliente: {
+          select: {
+            id: true,
+            hobbies: true,
+            fuma: true,
+            registro_conducao: true,
+            faixa_renda: true,
+            politicamente_exposto: true,
+            vinculo_politicamente_exposto: true,
+            profissao: true,
+            risco_profissao: true,
+            tb_pessoa: {
+              select: {
+                nm_pessoa: true,
+              },
+            },
+          },
+        },
       },
     });
 
