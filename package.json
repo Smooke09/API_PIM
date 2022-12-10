@@ -4,9 +4,9 @@
   "main": "index.js",
   "license": "BSD-2-Clause",
   "scripts": {
-    "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules src/loader",
+    "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules ./index.ts",
     "build": "tsc",
-    "start": "node dist/loader.js",
+    "start": "node dist/index.js",
     "prisma": "npx prisma generate",
     "prismaPull": "npx prisma db pull"
   },
