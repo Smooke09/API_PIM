@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { userClientScheme } from "../validations/userSchema";
 import prisma from "../services/prisma";
-import bcryptConfig from "../../Config/bcryptConfig";
+import bcryptConfig from "../Config/bcryptConfig";
 import { Error } from "../entities/error";
 
 // Editando um usuario

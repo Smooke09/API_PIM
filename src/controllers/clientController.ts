@@ -1,9 +1,8 @@
 import e, { Request, Response, NextFunction } from "express";
 import { Client } from "../interfaces/client";
-// import { token } from "../Config/token";
 import prisma from "../services/prisma";
 import { Error } from "../entities/error";
-import bcryptConfig from "../../Config/bcryptConfig";
+import bcryptConfig from "../Config/bcryptConfig";
 
 export const create = async (
   req: Request,
