@@ -38,7 +38,6 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
                 tb_cliente: true,
             },
         });
-        console.log(newCliente);
         // Se o email nao existir retorna um erro
         if (!user) {
             next(error_1.Error.badRequest("Email nao encontrado"));
@@ -48,8 +47,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
             // Verificando se a senha esta correta
             const isPasswordCorrect = yield bcrypt_1.default.compare(senha, user.senha);
             if (!isPasswordCorrect) {
-                next(error_1.Error.badRequest("Senha incorreta"));
-                return;
+                return next(error_1.Error.badRequest("Senha incorreta"));
             }
         }
         // Gerando o token

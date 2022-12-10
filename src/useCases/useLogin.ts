@@ -33,8 +33,6 @@ export const login = async (
       },
     });
 
-    console.log(newCliente);
-
     // Se o email nao existir retorna um erro
     if (!user) {
       next(Error.badRequest("Email nao encontrado"));
@@ -44,8 +42,7 @@ export const login = async (
       const isPasswordCorrect = await bcrypt.compare(senha, user.senha);
 
       if (!isPasswordCorrect) {
-        next(Error.badRequest("Senha incorreta"));
-        return;
+        return next(Error.badRequest("Senha incorreta"));
       }
     }
 
