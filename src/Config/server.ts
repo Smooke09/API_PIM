@@ -16,7 +16,7 @@ server.use(cors(options));
 server.use(express.urlencoded({ extended: false }));
 
 const ROOT_FOLDER = path.join(__dirname, "..");
-app.use(express.static(path.join(ROOT_FOLDER, "public")));
+server.use(express.static(path.join(ROOT_FOLDER, "public")));
 
 //End poitns
 
