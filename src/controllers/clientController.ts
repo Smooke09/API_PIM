@@ -243,16 +243,6 @@ export const addForm = async (
   try {
     const { client, funcionario_resp, status, pessoa_key } = req.body;
 
-    // const checkForm = await prisma.tb_chamado.findFirst({
-    //   where: {
-    //     cliente_id: pessoa_key,
-    //   },
-    // });
-
-    // if (checkForm) {
-    //   return next(Error.badRequest("Formulario já preenchido"));
-    // }
-
     const newClient = await prisma.tb_cliente.create({
       data: {
         hobbies: req.body.hobbies,
@@ -274,6 +264,7 @@ export const addForm = async (
 
     const newChamado = await prisma.tb_chamado.create({
       data: {
+        data: new Date(),
         cliente_id: newClient.id,
         funcionario_resp,
         status,

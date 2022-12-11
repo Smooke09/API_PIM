@@ -191,14 +191,6 @@ const addForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
     // Checando se ja existe formulario preenchido
     try {
         const { client, funcionario_resp, status, pessoa_key } = req.body;
-        // const checkForm = await prisma.tb_chamado.findFirst({
-        //   where: {
-        //     cliente_id: pessoa_key,
-        //   },
-        // });
-        // if (checkForm) {
-        //   return next(Error.badRequest("Formulario já preenchido"));
-        // }
         const newClient = yield prisma_1.default.tb_cliente.create({
             data: {
                 hobbies: req.body.hobbies,
@@ -218,6 +210,7 @@ const addForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         }
         const newChamado = yield prisma_1.default.tb_chamado.create({
             data: {
+                data: new Date(),
                 cliente_id: newClient.id,
                 funcionario_resp,
                 status,
